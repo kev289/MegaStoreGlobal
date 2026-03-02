@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
 
 const historySchema = new mongoose.Schema({
-    patientEmail: { type: String, unique: true },
-    patientName: String,
-    appointments: [{
-        appointmentId: String,
-        date: String,
-        doctorName: String,
-        specialty: String,
-        treatmentDescription: String,
-        amountPaid: Number
+    customer_email: { type: String, unique: true },
+    customer_name: String,
+    transaction_details: [{
+        details_id: String,
+        transaction_id: String,
+        product_sku: String,
+        quantity: Number
     }]
 });
 

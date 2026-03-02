@@ -2,25 +2,23 @@ const mysql = require('mysql2');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-// CONFIGURACION MYSQL CON VARIABLES DE ENTORNO
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
+    password: process.env.DB_PASSWORD || 'Asd.123*',
     database: process.env.DB_NAME
 });
 
 db.connect((err) => {
     if (err) {
-        console.error('Error conectando con MySQL', err.message);
+        console.error('Error connecting to MySQL', err.message);
     } else {
-        console.log('MySQL conectado');
+        console.log('MySQL Connected');
     }
 });
 
-// CONFIGURACION MONGODB
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Mongo Conectado'))
-    .catch(err => console.error('Error conectando con Mongo', err));
+    .then(() => console.log('Mongo Connected'))
+    .catch(err => console.error('Error Connecting to Mongo', err));
 
 module.exports = { db };

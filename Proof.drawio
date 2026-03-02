@@ -1,0 +1,85 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36" version="29.6.0">
+  <diagram name="Página-1" id="B6BmfXB_gr9VC_Oev3F1">
+    <mxGraphModel dx="1344" dy="793" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-1" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="TRANSACTIONS" vertex="1">
+          <mxGeometry height="290" width="160" x="140" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-2" parent="asxzbCYrjcQUyENCS5Wv-1" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="transaction_id INT AUTO_INCREMENT PRIMARY KEY&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;date DATETIME NOT NULL&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;customer_id INT FOREING KEY&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;product_category VARCHAR(50)&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;total_line_value FLOAT&amp;nbsp;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="240" width="160" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-3" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="PRODUCTS" vertex="1">
+          <mxGeometry height="290" width="160" x="500" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-4" parent="asxzbCYrjcQUyENCS5Wv-3" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="product_sku VARCHAR(50) PRIMARY KEY&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;product_name VARCHAR(150) NOT NULL&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;unit_price FLOAT NOT NULL&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;product_category VARCHAR(100)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;supplier_id INT FOREING KEY&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="240" width="160" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-5" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="CLIENTS" vertex="1">
+          <mxGeometry height="260" width="160" x="190" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-6" parent="asxzbCYrjcQUyENCS5Wv-5" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="customer_id INT AUTO_INCREMENT PRIMARY KEY&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;customer_name VARCHAR(100) NOT NULL&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;customer_email VARCHAR(100) UNIQUE NOT NULL&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;customer_addres VARCHAR(250)&amp;nbsp;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="160" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-7" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="SUPPLIER" vertex="1">
+          <mxGeometry height="260" width="160" x="470" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-8" parent="asxzbCYrjcQUyENCS5Wv-7" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="supplier_id INT AUTO_INCREMENT PRIMARY KEY&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;supplier_name VARCHAR(100) NOT NULL&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;supplier_email VARCHAR(100) UNIQUE NOT NULL&lt;/div&gt;" vertex="1">
+          <mxGeometry height="210" width="160" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-10" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="TRANSACTION DETAILS" vertex="1">
+          <mxGeometry height="280" width="160" x="320" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-11" parent="asxzbCYrjcQUyENCS5Wv-10" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="details_id INT AUTO_INCREMENT PRIMARY KEY&amp;nbsp;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;transaction_id INT NOT NULL FOREING KEY&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;product_sku VARCHAR(50) NOT NULL&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;quantity INT NOT NULL&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;unit_price FLOAT NOT NULL&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="230" width="160" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-14" edge="1" parent="1" source="asxzbCYrjcQUyENCS5Wv-1" style="fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="asxzbCYrjcQUyENCS5Wv-6" value="">
+          <mxGeometry height="100" relative="1" width="100" as="geometry">
+            <mxPoint x="170" y="410" as="sourcePoint" />
+            <mxPoint x="270" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-15" edge="1" parent="1" source="asxzbCYrjcQUyENCS5Wv-3" style="fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;entryX=0.38;entryY=0.996;entryDx=0;entryDy=0;exitX=0.563;exitY=0;exitDx=0;exitDy=0;entryPerimeter=0;exitPerimeter=0;" target="asxzbCYrjcQUyENCS5Wv-8" value="">
+          <mxGeometry height="100" relative="1" width="100" as="geometry">
+            <mxPoint x="520" y="400" as="sourcePoint" />
+            <mxPoint x="570" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-17" edge="1" parent="1" source="asxzbCYrjcQUyENCS5Wv-2" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERmany;startArrow=ERmany;rounded=0;entryX=0;entryY=0.583;entryDx=0;entryDy=0;entryPerimeter=0;exitX=1.012;exitY=0.581;exitDx=0;exitDy=0;exitPerimeter=0;" target="asxzbCYrjcQUyENCS5Wv-4" value="">
+          <mxGeometry height="100" relative="1" width="100" as="geometry">
+            <mxPoint x="350" y="585" as="sourcePoint" />
+            <mxPoint x="450" y="485" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-18" edge="1" parent="1" source="asxzbCYrjcQUyENCS5Wv-2" style="fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;entryX=-0.013;entryY=0.09;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="asxzbCYrjcQUyENCS5Wv-10" value="">
+          <mxGeometry height="100" relative="1" width="100" as="geometry">
+            <mxPoint x="170" y="750" as="sourcePoint" />
+            <mxPoint x="250" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-19" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1 : N" vertex="1">
+          <mxGeometry height="30" width="60" x="240" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="N : M&amp;nbsp;" vertex="1">
+          <mxGeometry height="30" width="60" x="370" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1 : N" vertex="1">
+          <mxGeometry height="30" width="60" x="590" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-24" edge="1" parent="1" source="asxzbCYrjcQUyENCS5Wv-10" style="fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=1.008;exitY=0.101;exitDx=0;exitDy=0;exitPerimeter=0;" target="asxzbCYrjcQUyENCS5Wv-4" value="">
+          <mxGeometry height="100" relative="1" width="100" as="geometry">
+            <mxPoint x="480" y="820" as="sourcePoint" />
+            <mxPoint x="580" y="720" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1 : N" vertex="1">
+          <mxGeometry height="30" width="60" x="210" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="asxzbCYrjcQUyENCS5Wv-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1 : N" vertex="1">
+          <mxGeometry height="30" width="60" x="530" y="720" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

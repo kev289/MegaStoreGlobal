@@ -3,7 +3,7 @@
             e.preventDefault();
             const formData = new FormData(form);
             const msgDiv = document.getElementById('mensaje');
-            msgDiv.innerText = "Procesando... por favor espera.";
+            msgDiv.innerText = "Process";
             msgDiv.style.color = "blue";
 
             try {
@@ -15,7 +15,7 @@
                 msgDiv.innerText = result.message || result.error;
                 msgDiv.style.color = response.ok ? "green" : "red";
             } catch (error) {
-                msgDiv.innerText = "Error de conexión con el servidor";
+                msgDiv.innerText = "Cannot conect to server";
                 msgDiv.style.color = "red";
             }
         };

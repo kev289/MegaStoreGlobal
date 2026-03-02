@@ -4,62 +4,59 @@ const csv = require('csv-parser');
 const path = require('path');
 const upload = require('./config/multer'); 
 const { db } = require('./config/db');
-const History = require('./models/History');
+const history = require('./models/history');
 
 const app = express();
 
 // Middlewares
-// Servir archivos estáticos desde la carpeta 'public'
+// Static files from the 'public' folder
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- RUTA DE MIGRACIÓN (POSTMAN) ---
+// Migration Route
 app.post('/api/migrate', upload.single('archivo'), (req, res) => {
     
-    // Validar que el archivo llegó
+    // validate that the file arrived
     if (!req.file) {
-        return res.status(400).json({ error: "No se recibió el archivo CSV en la llave 'archivo'" });
+        return res.status(400).json({ error: "The csv file was not received" });
     }
 
     const pathArchivo = req.file.path;
     let filasProcesadas = 0;
 
-    // Procesar el flujo de datos del CSV
-    fs.createReadStream(pathArchivo)
+// Process the CSV data stream    
+        fs.createReadStream(pathArchivo)
         .pipe(csv())
         .on('data', (fila) => {
-            // 1. INSERTAR EN MYSQL (Relacional)
+            // Insert tables and data into MySQL
             
-            // Tabla Doctors (Usando nombres de tu CSV)
-            db.query('INSERT IGNORE INTO doctors (name, email, specialty) VALUES (?, ?, ?)', 
-                [fila.doctor_name, fila.doctor_email, fila.specialty]);
+            db.query('INSERT IGNORE INTO clients (customer_name, customer_email, customer_address, customer_phone) VALUES (?, ?, ?, ?)', 
+                [fila.customer_name, fila.customer_email, fila.customer_address, fila.customer_phone]);
             
-            // Tabla Patients
-            db.query('INSERT IGNORE INTO patients (name, email, phone, address) VALUES (?, ?, ?, ?)', 
-                [fila.patient_name, fila.patient_email, fila.patient_phone, fila.patient_address]);
+            db.query('INSERT IGNORE INTO supplier (supplier_name, supplier_email ) VALUES (?, ? )', 
+                [fila.supplier_name, fila.supplier_email]);
 
-            // Tabla Insurances (Aseguradoras)
-            db.query('INSERT IGNORE INTO insurances (name) VALUES (?)', 
-                [fila.insurance_provider]);
+            db.query('INSERT IGNORE INTO products (product_category, product_sku, product_name) VALUES (?, ?, ?)', 
+                [fila.product_category, fila.product_sku, fila.product_name]);
 
-            // Tabla Appointments (Citas)
-            db.query('INSERT IGNORE INTO appointments (appointment_id, patient_email, insurance_name, amount_paid) VALUES (?, ?, ?, ?)', 
-                [fila.appointment_id, fila.patient_email, fila.insurance_provider, fila.amount_paid]);
+            db.query('INSERT IGNORE INTO transactions (transaction_id, date, total_line_value) VALUES (?, ?, ?)', 
+                [fila.transaction_id, fila.date, fila.total_line_value]);
 
-            // 2. INSERTAR/ACTUALIZAR EN MONGO DB (NoSQL - Historial Clínico)
-            History.findOneAndUpdate(
-                { patientEmail: fila.patient_email },
+            db.query('INSERT IGNORE INTO transaction_details (unit_price, quantity) VALUES (?, ? )', 
+                [fila.unit_price, fila.quantity]);
+
+            // 2. INSERT/UPDATE IN MONGO
+            history.findOneAndUpdate(
+                { customer_email: fila.customer_email },
                 { 
-                    $set: { patientName: fila.patient_name },
+                    $set: { customer_name: fila.customer_name },
                     $addToSet: { 
-                        appointments: {
-                            appointmentId: fila.appointment_id,
-                            date: fila.appointment_date,
-                            doctorName: fila.doctor_name,
-                            treatment: fila.treatment_description,
-                            cost: Number(fila.treatment_cost),
-                            paid: Number(fila.amount_paid)
+                        transaction_details: {
+                            details_id: fila.details_id,
+                            date: fila.date,
+                            customerName: fila.customer_name,
+                            quantity: fila.quantity,
                         }
                     }
                 },
@@ -69,46 +66,92 @@ app.post('/api/migrate', upload.single('archivo'), (req, res) => {
             filasProcesadas++;
         })
         .on('end', () => {
-            // Borrar archivo temporal de la carpeta uploads
             if (fs.existsSync(pathArchivo)) {
                 fs.unlinkSync(pathArchivo);
             }
             
-            console.log(`✅ Migración finalizada: ${filasProcesadas} filas procesadas.`);
+            console.log(`Files Upload Succesfully: ${filasProcesadas} Colum process.`);
             return res.json({ 
-                message: "Migración exitosa", 
-                detalles: `Se procesaron ${filasProcesadas} registros correctamente.` 
+                message: "Migration complete", 
+                detalles: `Records ${filasProcesadas} processed succesfully.` 
             });
         })
         .on('error', (err) => {
-            console.error("Error procesando el CSV:", err);
-            return res.status(500).json({ error: "Error interno al leer el archivo" });
+            console.error("Error Processing the CSV:", err);
+            return res.status(500).json({ error: "Error, Cannot read the CSV" });
         });
 });
 
-// --- RUTAS DE CONSULTA (REPORTE) ---
+// QUERIES
 
-// 1. Obtener ingresos por aseguradora (MySQL)
-app.get('/api/reports/revenue', (req, res) => {
-    const sql = 'SELECT insurance_name, SUM(amount_paid) as total_revenue FROM appointments GROUP BY insurance_name';
+// 1. Proveedores con más productos vendidos y valor del inventario
+app.get('/api/reports/top-suppliers', (req, res) => {
+    const sql = `
+        SELECT 
+            s.supplier_name AS 'Supplier',
+            COUNT(p.product_sku) AS 'Stock',
+            SUM(p.unit_price * COALESCE(td.quantity, 0)) AS 'Inventory Value'
+        FROM supplier s
+        LEFT JOIN products p ON s.supplier_id = p.supplier_id
+        LEFT JOIN transaction_details td ON p.product_sku = td.product_sku
+        GROUP BY s.supplier_id, s.supplier_name
+        ORDER BY 'Inventory Value' DESC;
+    `;
     db.query(sql, (err, results) => {
         if (err) return res.status(500).send(err);
         res.json(results);
     });
 });
 
-// 2. Obtener historial de un paciente (MongoDB)
-app.get('/api/patients/:email/history', async (req, res) => {
-    try {
-        const history = await History.findOne({ patientEmail: req.params.email });
-        res.json(history);
-    } catch (err) {
-        res.status(500).json(err);
-    }
+// 2. Historial de compras de un cliente específico
+app.get('/api/reports/customer-history/:email', (req, res) => {
+    const email = req.params.email;
+    const sql = `
+        SELECT 
+            c.customer_name AS 'Client',
+            c.customer_email AS 'Email',
+            t.date AS 'Transaction Date',
+            p.product_name AS 'Product',
+            td.quantity AS 'Quantity',
+            td.unit_price AS 'Unitary Price',
+            (td.quantity * td.unit_price) AS 'Payed'
+        FROM clients c
+        LEFT JOIN transactions t ON c.customer_id = t.customer_id
+        LEFT JOIN transaction_details td ON t.transaction_id = td.transaction_id
+        LEFT JOIN products p ON td.product_sku = p.product_sku
+        WHERE c.customer_email = ?
+        ORDER BY t.date DESC;
+    `;
+    db.query(sql, [email], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+});
+
+// 3. Productos más vendidos por categoría
+app.get('/api/reports/top-products/:category', (req, res) => {
+    const category = req.params.category;
+    const sql = `
+        SELECT 
+            p.product_category AS Categoria,
+            p.product_name AS Producto,
+            p.product_sku AS SKU,
+            SUM(td.quantity) AS Cantidad_Vendida,
+            SUM(td.quantity * td.unit_price) AS Ingresos_Totales
+        FROM products p
+        LEFT JOIN transaction_details td ON p.product_sku = td.product_sku
+        WHERE p.product_category = ?
+        GROUP BY p.product_sku, p.product_name, p.product_category
+        ORDER BY Ingresos_Totales DESC
+    `;
+    db.query(sql, [category], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
 });
 
 // Iniciar Servidor
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(` Servidor SaludPlus corriendo en http://localhost:${PORT}`);
+    console.log(` Database MegaStore Running in http://localhost:${PORT}`);
 });
