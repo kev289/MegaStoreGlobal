@@ -1,4 +1,4 @@
-//Requirements
+// Requirements
 
 const express = require('express');
 const fs = require('fs');
@@ -7,6 +7,7 @@ const path = require('path');
 const upload = require('./config/multer'); 
 const { db } = require('./config/db');
 const history = require('./models/history');
+const clientsRouter = require('./routes/clients');
 
 const app = express();
 
@@ -15,6 +16,9 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use('/api/clients', clientsRouter);
 
 // Migration Route
 app.post('/api/migrate', upload.single('archivo'), (req, res) => {

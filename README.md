@@ -47,3 +47,56 @@
 - MongoDB stores records of purchases made by users
 
 - MySQL stores all user data
+
+## STRUCTURE PROJECT
+```
+   /PRUEBADESEMPENO
+   ├── config/
+   │   ├── db.js         # Connection configuration for MySQL and MongoDB
+   │   └── multer.js     # File upload configuration 
+   ├── models/
+   │   └── history.js    # Schema MongoDB
+   ├── public/
+   │   |__ index.html    
+   |   |__ Style.css    
+   |   |__ script.js
+   |
+   ├── uploads/          
+   ├── index.js          # Main Node.js server file
+   ├── package.json      # Dependencies and scripts
+   ├── database.sql      # MySQL table creation script
+   ├── AM-prueba-desempeno.csv 
+   └── README.md         # Project documentation`
+```
+
+## CRUD 
+
+1. See all Clients
+
+```PostMan
+   GET http://localhost:3000/api/clients/ 
+```
+
+2. Search the client with the ID in value put the customer_id
+
+```PostMan
+   GET http://localhost:3000/api/clients/:id
+```
+
+3. Create a new Client 
+
+```PostMan
+   POST http://localhost:3000/api/clients/
+```
+
+4. Update a Client with ID
+
+```PostMan
+   PUT http://localhost:3000/api/clients/:id
+```
+
+5. Delete a client with ID
+
+```PostMan
+   DELETE http://localhost:3000/api/clients/:id
+```
