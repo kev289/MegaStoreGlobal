@@ -1,5 +1,7 @@
+//Requeriments 
 const mongoose = require('mongoose');
 
+//This is a scheme to organize and know what will be uploaded via CSV.
 const historySchema = new mongoose.Schema({
     customer_email: { type: String, unique: true },
     customer_name: String,
@@ -11,4 +13,5 @@ const historySchema = new mongoose.Schema({
     }]
 });
 
+//Export the schema for use
 module.exports = mongoose.model('History', historySchema);

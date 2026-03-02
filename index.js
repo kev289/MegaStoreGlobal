@@ -1,3 +1,5 @@
+//Requirements
+
 const express = require('express');
 const fs = require('fs');
 const csv = require('csv-parser');
@@ -17,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // Migration Route
 app.post('/api/migrate', upload.single('archivo'), (req, res) => {
     
-    // validate that the file arrived
+    // Validate that the file arrived
     if (!req.file) {
         return res.status(400).json({ error: "The csv file was not received" });
     }
@@ -84,7 +86,7 @@ app.post('/api/migrate', upload.single('archivo'), (req, res) => {
 
 // QUERIES
 
-// 1. Proveedores con más productos vendidos y valor del inventario
+// Suppliers with the most products sold and inventory value
 app.get('/api/reports/top-suppliers', (req, res) => {
     const sql = `
         SELECT 
@@ -103,54 +105,7 @@ app.get('/api/reports/top-suppliers', (req, res) => {
     });
 });
 
-// 2. Historial de compras de un cliente específico
-app.get('/api/reports/customer-history/:email', (req, res) => {
-    const email = req.params.email;
-    const sql = `
-        SELECT 
-            c.customer_name AS 'Client',
-            c.customer_email AS 'Email',
-            t.date AS 'Transaction Date',
-            p.product_name AS 'Product',
-            td.quantity AS 'Quantity',
-            td.unit_price AS 'Unitary Price',
-            (td.quantity * td.unit_price) AS 'Payed'
-        FROM clients c
-        LEFT JOIN transactions t ON c.customer_id = t.customer_id
-        LEFT JOIN transaction_details td ON t.transaction_id = td.transaction_id
-        LEFT JOIN products p ON td.product_sku = p.product_sku
-        WHERE c.customer_email = ?
-        ORDER BY t.date DESC;
-    `;
-    db.query(sql, [email], (err, results) => {
-        if (err) return res.status(500).send(err);
-        res.json(results);
-    });
-});
-
-// 3. Productos más vendidos por categoría
-app.get('/api/reports/top-products/:category', (req, res) => {
-    const category = req.params.category;
-    const sql = `
-        SELECT 
-            p.product_category AS Categoria,
-            p.product_name AS Producto,
-            p.product_sku AS SKU,
-            SUM(td.quantity) AS Cantidad_Vendida,
-            SUM(td.quantity * td.unit_price) AS Ingresos_Totales
-        FROM products p
-        LEFT JOIN transaction_details td ON p.product_sku = td.product_sku
-        WHERE p.product_category = ?
-        GROUP BY p.product_sku, p.product_name, p.product_category
-        ORDER BY Ingresos_Totales DESC
-    `;
-    db.query(sql, [category], (err, results) => {
-        if (err) return res.status(500).send(err);
-        res.json(results);
-    });
-});
-
-// Iniciar Servidor
+// Run server
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(` Database MegaStore Running in http://localhost:${PORT}`);
