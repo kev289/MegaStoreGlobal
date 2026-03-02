@@ -109,6 +109,54 @@ app.get('/api/reports/top-suppliers', (req, res) => {
     });
 });
 
+/// A user's purchase history shows product, date, and total.
+app.get('/api/reports/client-history/:customerId', (req, res) => {
+    const { customerId } = req.params;
+    const sql = `
+        SELECT 
+            t.transaction_id,
+            t.date,
+            p.product_name,
+            p.product_category,
+            td.quantity,
+            td.unit_price,
+            (td.quantity * td.unit_price) AS total_gastado
+        FROM transactions t
+        INNER JOIN clients c ON t.customer_id = c.customer_id
+        INNER JOIN transaction_details td ON t.transaction_id = td.transaction_id
+        INNER JOIN products p ON td.product_sku = p.product_sku
+        WHERE c.customer_id = ?
+        ORDER BY t.date DESC;
+    `;
+    db.query(sql, [customerId], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+});
+
+// Star products: The best-selling products within a specific category
+app.get('/api/reports/top-products/:category', (req, res) => {
+    const { category } = req.params;
+    const sql = `
+        SELECT 
+            p.product_sku,
+            p.product_name,
+            p.product_category,
+            SUM(td.quantity) AS total_vendido,
+            SUM(td.quantity * td.unit_price) AS ingresos_generados
+        FROM products p
+        INNER JOIN transaction_details td ON p.product_sku = td.product_sku
+        WHERE p.product_category = ?
+        GROUP BY p.product_sku, p.product_name, p.product_category
+        ORDER BY ingresos_generados DESC;
+    `;
+    db.query(sql, [category], (err, results) => {
+        if (err) return res.status(500).send(err);
+        res.json(results);
+    });
+});
+
+
 // Run server
 const PORT = 3000;
 app.listen(PORT, () => {

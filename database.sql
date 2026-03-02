@@ -20,7 +20,9 @@ CREATE TABLE products (
     product_name VARCHAR(150) NOT NULL,
     unit_price DECIMAL(10,2) NOT NULL,
     product_category VARCHAR(50),
-    supplier_id INT
+    supplier_id INT,
+    CONSTRAINT fk_product_supplier FOREIGN KEY (supplier_id) 
+        REFERENCES supplier(supplier_id) ON DELETE SET NULL
 );
 
 CREATE TABLE transactions (
@@ -28,7 +30,9 @@ CREATE TABLE transactions (
     date DATETIME NOT NULL,
     customer_id INT,
     product_category VARCHAR(50),
-    total_line_value FLOAT
+    total_line_value FLOAT,
+    CONSTRAINT fk_transaction_client FOREIGN KEY (customer_id) 
+        REFERENCES clients(customer_id) ON DELETE CASCADE
 );
 
 CREATE TABLE transaction_details (
@@ -36,6 +40,9 @@ CREATE TABLE transaction_details (
     transaction_id INT NOT NULL,
     product_sku VARCHAR(50) NOT NULL,
     quantity INT NOT NULL,
-    unit_price FLOAT NOT NULL
+    unit_price FLOAT NOT NULL,
+    CONSTRAINT fk_details_transaction FOREIGN KEY (transaction_id) 
+        REFERENCES transactions(transaction_id) ON DELETE CASCADE,
+    CONSTRAINT fk_details_product FOREIGN KEY (product_sku) 
+        REFERENCES products(product_sku) ON DELETE RESTRICT
 );
-
