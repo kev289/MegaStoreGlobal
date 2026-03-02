@@ -100,3 +100,9 @@
 ```PostMan
    DELETE http://localhost:3000/api/clients/:id
 ```
+
+## Finally 
+
+-- I've done queries using join and group by
+
+-- In the future, I will implement a graphical interface for CRUD. 
